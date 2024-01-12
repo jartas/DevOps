@@ -2,7 +2,13 @@ brew install ansible
 brew install sshpass
 export ANSIBLE_HOST_KEY_CHECKING=False
 
-nano ~/.hosts
+edit ./host
+
+replace username and password and ip in file
 
 
-ansible-playbook k3s_full_cluster.yml --inventory-file=~/hosts
+#install cluster
+ansible-playbook k3s_install.yml --inventory-file=~/hosts
+
+#uninstall cluster
+ansible-playbook uninstall.yml --inventory-file=~/hosts

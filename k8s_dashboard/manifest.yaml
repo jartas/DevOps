@@ -41,7 +41,7 @@ metadata:
     kubernetes.io/ingress.class: "traefik"
 spec:
   rules:
-  - host: dashboard.domain
+  - host: dashboard.domain.local
     http:
       paths:
       - path: /

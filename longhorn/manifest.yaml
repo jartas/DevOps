@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: "traefik"
 spec:
   rules:
-  - host: longhorn.czmbok3s0001.k8s.corp
+  - host: longhorn.domain.local
     http:
       paths:
       - path: /
