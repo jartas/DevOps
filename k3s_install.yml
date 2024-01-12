@@ -1,51 +1,15 @@
-- hosts: k3s_all
-  gather_facts: true
-  remote_user: root
-  become: yes
-  vars:
-    ansible_become_pass: "ubuntu"
-
-  tasks:
-  - name: create directory if they don't exist
-    file:
-      path: "{{ item }}"
-      state: directory
-      owner: root
-      group: root
-      mode: 0775
-    loop:
-    - /root/k3s
-
-  - name: Copy K3S image and binary
-    copy:
-      src: "{{ item.src }}"
-      dest: "{{ item. dest }}"
-      owner: root
-      group: root
-      mode: 0775
-    with_items:
-    - src: /Users/tomasjartymyk/K3s/k8s_dashboard/serviceaccount.yaml
-      dest: /root/k3s/serviceaccount.yaml
-    - src: /Users/tomasjartymyk/K3s/k8s_dashboard/ingress.yaml
-      dest: /root/k3s/dashboard_ingress.yaml
-    - src: /Users/tomasjartymyk/K3s/metallb/metallb.yaml
-      dest: /root/k3s/metallb.yaml
-    - src: /Users/tomasjartymyk/K3s/longhorn/ingress.yaml
-      dest: /root/k3s/longhorn_ingress.yaml
-
 - hosts: k3s_1st_master_install
   gather_facts: true
   remote_user: root
   become: yes
-  vars:
-    ansible_become_pass: "DevOps753 "
+
 
   tasks:
   - name: Install first K3S master node
     shell: curl -sfL https://get.k3s.io | sh -s - server --cluster-init --disable servicelb
     args:
       executable: /bin/bash
-  - name: get the K3S token value
+  - name: test
     shell: cat "/var/lib/rancher/k3s/server/token"
     register: token
 
@@ -54,14 +18,10 @@
   gather_facts: true
   remote_user: root
   become: yes
-  vars:
-    ansible_become_pass: "DevOps753 "
 
   tasks:
-  - name: view the token value
-    debug: msg="{{ hostvars[item].token.stdout }}"
-    with_items: "{{ groups['k3s_1st_master_install'] }}"
-  - name: Install  K3S master node
+
+  - name: Join K3S node to cluster
     shell: curl -sfL https://get.k3s.io | K3S_TOKEN={{ hostvars[item].token.stdout }} sh -s - server --server https://{{ hostvars[item].ansible_default_ipv4.address }}:6443 --cluster-init --disable servicelb
     with_items: "{{ groups['k3s_1st_master_install'] }}"
     args:
@@ -71,8 +31,7 @@
   gather_facts: true
   remote_user: root
   become: yes
-  vars:
-    ansible_become_pass: "DevOps753"
+
   tasks:
   - name: Instalation Metallb (loadbalancer)
     shell: |
@@ -107,7 +66,7 @@
     shell: |
       kubectl create namespace longhorn-system
       kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.5.3/deploy/longhorn.yaml
-      kubectl apply -f /root/k3s/longhorn_ingress.yaml
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/longhorn/manifest.yaml
     args:
       executable: /bin/bash
 

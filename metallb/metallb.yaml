@@ -5,7 +5,8 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  #- range ip adress or ip address
+  #- range ip adress or ip address, must be change
+  - 127.0.0.1/32
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
