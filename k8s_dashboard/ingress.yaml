@@ -4,10 +4,10 @@ metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
   annotations:
-   kubernetes.io/ingress.class: "traefik"
+    kubernetes.io/ingress.class: "traefik"
 spec:
- rules:
-  - host: dashboard.czmbok3s0001.k8s.corp
+  rules:
+  - host: dashboard.domain
     http:
       paths:
       - path: /
@@ -16,4 +16,5 @@ spec:
           service:
             name: kubernetes-dashboard
             port:
-             number: 443
+              number: 443
+
