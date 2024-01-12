@@ -15,8 +15,6 @@
       mode: 0775
     loop:
     - /root/k3s
-    environment:
-      INSTALL_FOLDER: /
 
   - name: Copy K3S image and binary
     copy:
@@ -83,16 +81,15 @@
       POD=$(kubectl get pods -l app=metallb -o jsonpath="{.items[0].metadata.name}" -n metallb-system)
       echo $POD
       kubectl wait --for=condition=Ready pod/$POD -n metallb-system
-      kubectl apply -f /root/k3s/metallb.yaml
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/metallb/metallb.yaml --insecure-skip-tls-verify
     args:
       executable: /bin/bash
 
   - name: Instalation K8s Dashboard
     shell: |
       kubectl create namespace kubernetes-dashboard
-      kubectl apply -f /root/k3s/serviceaccount.yaml
-      kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
-      kubectl apply -f /root/k3s/ingress.yaml
+      kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml --insecure-skip-tls-verify
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/k8s_dashboard/manifest.yaml --insecure-skip-tls-verify
       kubectl wait --for=condition=complet deployment/traefik -n kube-system
       kubectl -n kube-system patch deployment traefik \
       --type=json \

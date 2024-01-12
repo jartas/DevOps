@@ -4,9 +4,9 @@ metadata:
   name: longhorn-system
   namespace: longhorn-system
   annotations:
-   kubernetes.io/ingress.class: "traefik"
+    kubernetes.io/ingress.class: "traefik"
 spec:
- rules:
+  rules:
   - host: longhorn.czmbok3s0001.k8s.corp
     http:
       paths:
@@ -16,4 +16,4 @@ spec:
           service:
             name: longhorn-frontend
             port:
-             number: 80
+              number: 80
