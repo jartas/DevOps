@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: library-pvc
+  name: library-longhorn-pvc
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: local-storage
+  storageClassName: longhorn
   resources:
     requests:
-      storage: 1Gi
+      storage: 2Gi

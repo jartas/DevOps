@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: configmap-db
 data:
-  POSTGRES_DB: defaultdb
-  POSTGRES_PASSWORD: "AVNS__eSVXYKG4pmNKY7lT2J"
+  POSTGRES_DB: library_test
+  POSTGRES_PASSWORD: "1234"
   POSTGRES_HOST_AUTH_METHOD: trust
   SERVICE_MANAGER: fsm-postgres
