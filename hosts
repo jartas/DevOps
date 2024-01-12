@@ -1,0 +1,12 @@
+[k3s_1st_master_install]
+node1 ansible_host=64.226.80.174 ansible_ssh_user=root ansible_ssh_pass=DevOps753
+
+[k3s_master_install]
+node2 ansible_host=64.226.80.174 ansible_ssh_user=root ansible_ssh_pass=DevOps753
+node3 ansible_host=164.92.188.100 ansible_ssh_user=root ansible_ssh_pass=DevOps753
+
+
+[k3s_all]
+node1 ansible_host=64.226.80.174 ansible_ssh_user=root ansible_ssh_pass=DevOps753
+node2 ansible_host=138.68.77.66 ansible_ssh_user=root ansible_ssh_pass=DevOps753
+node3 ansible_host=164.92.188.100 ansible_ssh_user=root ansible_ssh_pass=DevOps753

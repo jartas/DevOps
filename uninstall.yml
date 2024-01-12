@@ -1,0 +1,15 @@
+- hosts: k3s_all
+  gather_facts: true
+  remote_user: root
+  become: yes
+  vars:
+    ansible_become_pass: "ubuntu"
+
+  tasks:
+  - name: uninstall K3S cluster
+    shell: >
+      /usr/local/bin/k3s-uninstall.sh
+    args:
+      executable: /bin/bash
+
+
