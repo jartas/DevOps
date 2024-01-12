@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-lib
+data:
+  DATABASE_HOST: "postgres-service"
+  DATABASE_USER: doadmin
+  DATABASE_PASSWORD: "AVNS__eSVXYKG4pmNKY7lT2J"
+  DATABASE_NAME: library
+  DATABASE_URL: "postgresql://doadmin:AVNS__eSVXYKG4pmNKY7lT2J@db-postgresql-fra1-17578-do-user-15577978-0.c.db.ondigitalocean.com:25060/library"
+  RAILS_ENV: "test"
+  SSLMODE: "require"
