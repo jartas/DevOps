@@ -67,21 +67,10 @@
       helm install prometheus prometheus-community/prometheus --namespace monitoring --create-namespace service.type=NodePort --kubeconfig /etc/rancher/k3s/k3s.yaml
 
       helm install grafana grafana/grafana --namespace monitoring --create-namespace \
-      --set service.type=NodePort \
-      --set persistence.enabled=true  \
-      --set persistence.storageClassName="longhorn" \
-      --set persistence.existingClaim="grafana-pvc-claim" \
 
       --kubeconfig /etc/rancher/k3s/k3s.yaml
     args:
       executable: /bin/bash
 
-  - name: Add datasource prometheus
-    shell: |
-      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/grafana/configmap.yaml
-      kubectl patch deployment grafana -n monitoring --type='json' -p='[{"op": "add", "path": "/spec/template/spec/volumes", "value": [{"name": "grafana-dashboard","configMap": {"name": "grafana-dashboard"}}]}]'
 
-
-    args:
-      executable: /bin/bash
 

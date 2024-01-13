@@ -413,8 +413,7 @@ initChownData:
 
 # Administrator credentials when not using an existing secret (see below)
 adminUser: admin
-# adminPassword: strongpassword
-
+#adminPassword: admin
 # Use an existing secret for the admin user.
 admin:
   ## Name of the secret. Can be templated.
@@ -775,6 +774,10 @@ grafana.ini:
     mode: console
   grafana_net:
     url: https://grafana.net
+  dashboards:
+    versions_to_keep: 0
+    min_refresh_interval: 5s
+    default_home_dashboard_path: /etc/grafana/provisioning/dashboards/dashboard.json
   server:
     domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ .Values.ingress.hosts | first }}{{ else }}''{{ end }}"
     ## grafana Authentication can be enabled with the following values on grafana.ini
