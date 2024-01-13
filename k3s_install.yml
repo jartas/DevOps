@@ -70,7 +70,7 @@
       --set service.type=NodePort \
       --set persistence.enabled=true  \
       --set persistence.storageClassName="longhorn" \
-      --set persistence.existingClaim="grafana-pvc" \
+      --set persistence.existingClaim="grafana-pvc-claim" \
       --kubeconfig /etc/rancher/k3s/k3s.yaml
     args:
       executable: /bin/bash
