@@ -72,6 +72,12 @@
       --set persistence.storageClassName="longhorn" \
       --set persistence.existingClaim="grafana-pvc" \
       --kubeconfig /etc/rancher/k3s/k3s.yaml
+    args:
+      executable: /bin/bash
+
+  - name: Add datasource prometheus
+    shell: |
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/grafana/configmap.yaml
 
     args:
       executable: /bin/bash
