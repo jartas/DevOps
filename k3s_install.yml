@@ -58,7 +58,14 @@
     args:
       executable: /bin/bash
 
-  - name: Install Prometheus/grafana
+  - name: Install Prometheus
+    # Install prometheus with default NodePort
+    shell: |
+      helm install prometheus prometheus-community/prometheus -n monitoring -f https://raw.githubusercontent.com/jartas/DevOps/main/prometheus/values.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml
+    args:
+      executable: /bin/bash
+
+  - name: Install Grafana
     # Install Prometheus/Grafana including datasource for K3s and dashboard for K3s monitoring with default dashboard
     shell: |
       helm install grafana grafana/grafana -n monitoring -f https://raw.githubusercontent.com/jartas/DevOps/main/grafana/values.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml
