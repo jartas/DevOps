@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: grafana-pv-claim
+  name: grafana-pvc-claim
   namespace: monitoring
 spec:
   storageClassName: longhorn
