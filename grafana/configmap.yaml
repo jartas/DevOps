@@ -1,51 +1,21 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: grafana-datasource
+  name: grafana-dashboardsdef
   namespace: monitoring
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"v1","data":{"dashboards.yaml":"apiVersion: 1\nproviders: \n  - name: 'Metrics'\n    updateIntervalSeconds: 10\n    allowUiUpdates: true\n    options:\n      path: /var/lib/grafana/dashboards\n      foldersFromFilesStructure: true\n    type: file\n      #magic___^_^___line"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"grafana-dashboardsdef","namespace":"monitoring"}} #magic___^_^___line
 data:
-  ds.yaml: |-
-
-    {
-        "apiVersion": 1,
-        "datasources": [
-            {
-              "name": "k3s prometheus",
-              "type": "prometheus",
-              "uid": "k3s",
-              "url": "http://164.92.188.100:30536/"
-            }
-        ]
-    }
-
-
+  dashboards.yaml: "apiVersion: 1\nproviders: \n  - name: 'Metrics'\n    updateIntervalSeconds: 10\n    allowUiUpdates: true\n    options:\n      path: /etc/grafana/provisioning/datasources\n      foldersFromFilesStructure: true\n    type: file\n      #magic___^_^___line"
 ---
-kind: ConfigMap
 apiVersion: v1
+kind: ConfigMap
 metadata:
   name: grafana-dashboard
   namespace: monitoring
 data:
-
-  db.yaml: |-
-
-    {
-        "apiVersion": 1,
-        "providers": [
-            {
-                "folder": "",
-                "name": "0",
-                "options": {
-                    "path": "/etc/grafana/provisioning/dashboards"
-                },
-                "orgId": 1,
-                "type": "file"
-            },
-        ]
-    }
-
   dashboard.json: |-
-
     {
       "annotations": {
         "list": [
@@ -81,8 +51,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -95,8 +65,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -878,8 +848,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -892,8 +862,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -1229,8 +1199,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -1243,8 +1213,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -1263,6 +1233,9 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "cores",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -1274,6 +1247,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
+                "insertNulls": false,
                 "lineInterpolation": "stepAfter",
                 "lineWidth": 0,
                 "pointSize": 3,
@@ -1296,7 +1270,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1327,7 +1302,8 @@ data:
               "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "mode": "single",
+              "sort": "none"
             }
           },
           "pluginVersion": "8.0.6",
@@ -1354,8 +1330,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -1368,8 +1344,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -1508,8 +1484,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -1522,8 +1498,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -1633,8 +1609,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -1647,8 +1623,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -1757,8 +1733,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -1771,8 +1747,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -1908,8 +1884,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -1922,8 +1898,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -2031,8 +2007,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -2045,8 +2021,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -2170,8 +2146,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "prometheus",
-            "uid": "k3s"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
           "gridPos": {
             "h": 1,
@@ -2184,8 +2160,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "k3s"
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
               "refId": "A"
             }
@@ -2467,8 +2443,266 @@ data:
         ]
       },
       "timezone": "browser",
-      "title": "K3s cluster monitoring",
-      "uid": "1bI4P-xiz-Test",
-      "version": 1,
+      "title": "K3S cluster monitoring",
+      "uid": "1bI4P-xiz",
+      "version": 2,
+      "weekStart": ""
+    }
+
+  logs.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:75",
+            "builtIn": 1,
+            "datasource": {
+              "type": "datasource",
+              "uid": "grafana"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "description": "Log Viewer Dashboard for Loki",
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "gnetId": 13639,
+      "graphTooltip": 0,
+      "id": 3,
+      "links": [
+        {
+          "$$hashKey": "object:59",
+          "icon": "bolt",
+          "includeVars": true,
+          "keepTime": true,
+          "tags": [],
+          "targetBlank": true,
+          "title": "View In Explore",
+          "type": "link",
+          "url": "/explore?orgId=1&left=[\"now-1h\",\"now\",\"Loki\",{\"expr\":\"{job=\\\"$app\\\"}\"},{\"ui\":[true,true,true,\"none\"]}]"
+        },
+        {
+          "$$hashKey": "object:61",
+          "icon": "external link",
+          "tags": [],
+          "targetBlank": true,
+          "title": "Learn LogQL",
+          "type": "link",
+          "url": "https://grafana.com/docs/loki/latest/logql/"
+        }
+      ],
+      "liveNow": false,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 3,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 6,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": false,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "10.2.3",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
+              },
+              "expr": "sum(count_over_time({job=\"$app\"} |= \"$search\" [$__interval]))",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:168",
+              "format": "short",
+              "logBase": 1,
+              "show": false
+            },
+            {
+              "$$hashKey": "object:169",
+              "format": "short",
+              "logBase": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "gridPos": {
+            "h": 25,
+            "w": 24,
+            "x": 0,
+            "y": 3
+          },
+          "id": 2,
+          "maxDataPoints": "",
+          "options": {
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showLabels": false,
+            "showTime": true,
+            "sortOrder": "Descending",
+            "wrapLogMessage": false
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
+              },
+              "expr": "{job=\"$app\"} |= \"$search\" | logfmt",
+              "hide": false,
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "transparent": true,
+          "type": "logs"
+        }
+      ],
+      "refresh": "",
+      "schemaVersion": 39,
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "current": {
+              "selected": false,
+              "text": "default/postgres-app",
+              "value": "default/postgres-app"
+            },
+            "datasource": {
+              "type": "loki",
+              "uid": "P8E80F9AEF21F6940"
+            },
+            "definition": "label_values(job)",
+            "hide": 0,
+            "includeAll": false,
+            "label": "App",
+            "multi": false,
+            "name": "app",
+            "options": [],
+            "query": "label_values(job)",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "",
+              "value": ""
+            },
+            "hide": 0,
+            "label": "String Match",
+            "name": "search",
+            "options": [
+              {
+                "selected": true,
+                "text": "",
+                "value": ""
+              }
+            ],
+            "query": "",
+            "skipUrlSync": false,
+            "type": "textbox"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "timepicker": {
+        "hidden": false,
+        "refresh_intervals": [
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "Logs / App",
+      "uid": "sadlil-loki-apps-dashboard",
+      "version": 2,
       "weekStart": ""
     }

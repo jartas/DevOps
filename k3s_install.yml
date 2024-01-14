@@ -65,12 +65,13 @@
     args:
       executable: /bin/bash
 
-  - name: Install Grafana
-    # Install Prometheus/Grafana including datasource for K3s and dashboard for K3s monitoring with default dashboard
-    shell: |
-      helm install grafana grafana/grafana -n monitoring -f https://raw.githubusercontent.com/jartas/DevOps/main/grafana/values.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml
+  - name: Install Grafana/Loki
+    # Install /Grafana/Loki including datasource for K3s and dashboard for K3s monitoring with default dashboard
+    shell: "helm install loki grafana/loki-stack -n monitoring --values -f https://raw.githubusercontent.com/jartas/DevOps/main/loki/values.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml\nkubectl apply -f ./loki/deployment.yaml -f https://raw.githubusercontent.com/jartas/DevOps/main/loki/deployment.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml \n"
     args:
       executable: /bin/bash
+
+
 
 
 
