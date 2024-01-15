@@ -1,0 +1,14 @@
+
+- hosts: k3s_1st_master_install
+  gather_facts: true
+  remote_user: root
+  become: yes
+
+  tasks:
+
+
+
+
+
+
+

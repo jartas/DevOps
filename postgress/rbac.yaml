@@ -1,14 +1,15 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: percona-postgresql-operator
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ include "install.roleKind" . }}
+kind: Role
 metadata:
-  name: {{ include "install.roleName" . }}
-  labels:
-    {{- include "install.labels" . | nindent 4 }}
-    {{- include "install.clusterLabels" . | nindent 4 }}
+  name: percona-postgresql-operator
 rules:
 - apiGroups:
-  - ''
+  - ""
   resources:
   - configmaps
   - persistentvolumeclaims
@@ -22,7 +23,7 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - endpoints
   verbs:
@@ -34,21 +35,21 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - endpoints/restricted
   - pods/exec
   verbs:
   - create
 - apiGroups:
-  - ''
+  - ""
   resources:
   - events
   verbs:
   - create
   - patch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - pods
   verbs:
@@ -58,7 +59,7 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - serviceaccounts
   verbs:
@@ -71,6 +72,7 @@ rules:
   - apps
   resources:
   - deployments
+  - replicasets
   - statefulsets
   verbs:
   - create
@@ -83,6 +85,16 @@ rules:
   - batch
   resources:
   - cronjobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - batch
+  resources:
   - jobs
   verbs:
   - create
@@ -90,6 +102,59 @@ rules:
   - get
   - list
   - patch
+  - update
+  - watch
+- apiGroups:
+  - pgv2.percona.com
+  resources:
+  - perconapgbackups
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - pgv2.percona.com
+  resources:
+  - perconapgbackups/finalizers
+  - perconapgclusters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - pgv2.percona.com
+  resources:
+  - perconapgbackups/status
+  verbs:
+  - create
+  - patch
+  - update
+- apiGroups:
+  - pgv2.percona.com
+  resources:
+  - perconapgclusters
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - pgv2.percona.com
+  resources:
+  - perconapgclusters/status
+  - perconapgrestores/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - pgv2.percona.com
+  resources:
+  - perconapgrestores
+  verbs:
+  - get
+  - list
   - watch
 - apiGroups:
   - policy
@@ -105,7 +170,6 @@ rules:
 - apiGroups:
   - postgres-operator.crunchydata.com
   resources:
-  - pgadmins
   - pgupgrades
   verbs:
   - get
@@ -114,7 +178,6 @@ rules:
 - apiGroups:
   - postgres-operator.crunchydata.com
   resources:
-  - pgadmins/finalizers
   - pgupgrades/finalizers
   - postgresclusters/finalizers
   verbs:
@@ -122,7 +185,6 @@ rules:
 - apiGroups:
   - postgres-operator.crunchydata.com
   resources:
-  - pgadmins/status
   - pgupgrades/status
   - postgresclusters/status
   verbs:
@@ -132,9 +194,12 @@ rules:
   resources:
   - postgresclusters
   verbs:
+  - create
+  - delete
   - get
   - list
   - patch
+  - update
   - watch
 - apiGroups:
   - rbac.authorization.k8s.io
@@ -147,3 +212,15 @@ rules:
   - list
   - patch
   - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: service-account-percona-postgresql-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: percona-postgresql-operator
+subjects:
+- kind: ServiceAccount
+  name: percona-postgresql-operator
