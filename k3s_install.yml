@@ -40,7 +40,7 @@
 
   - name: Instalation K8s Dashboard
     shell: >
-      kubectl create namespace kubernetes-dashboard kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/k8s_dasboard/rbac.yaml  kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/k8s_dashboard/manifest.yaml  kubectl wait --for=condition=complet deployment/traefik -n kube-system\nkubectl -n kube-system patch deployment traefik n--type=json -p='[{\\\"op\\\": \\\"add\\\", \\\"path\\\": \\\"/spec/template/spec/containers/0/args/-\\\", \\\"value\\\": \\\"--serversTransport.insecureSkipVerify=true\\\"}]' kubectl -n kubernetes-dashboard patch deployment kubernetes-dashboard --type=json -p='[{\\\"op\\\": \\\"add\\\", \\\"path\\\": \\\"/spec/template/spec/containers/0/args/-\\\", \\\"value\\\": \\\"--token-ttl=0\\\"}]'\n"
+      kubectl create namespace kubernetes-dashboard  kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/k8s_dashboard/rbac.yaml   kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/k8s_dashboard/manifest.yaml   kubectl wait --for=condition=complet deployment/traefik -n kube-system\nkubectl -n kube-system patch deployment traefik n--type=json -p='[{\\\"op\\\": \\\"add\\\", \\\"path\\\": \\\"/spec/template/spec/containers/0/args/-\\\", \\\"value\\\": \\\"--serversTransport.insecureSkipVerify=true\\\"}]'  kubectl -n kubernetes-dashboard patch deployment kubernetes-dashboard --type=json -p='[{\\\"op\\\": \\\"add\\\", \\\"path\\\": \\\"/spec/template/spec/containers/0/args/-\\\", \\\"value\\\": \\\"--token-ttl=0\\\"}]'\n"
     args:
       executable: /bin/bash
 
