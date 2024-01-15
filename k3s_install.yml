@@ -56,8 +56,7 @@
       kubectl create namespace longhorn-system
       kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.5.3/deploy/longhorn.yaml
       kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/longhorn/manifest.yaml
-      kubectl rollout status deploy/longhorn-ui -n longhorn-system
-      kubectl rollout status deploy/longhorn-driver-deployer -n longhorn-system
+      sleep 120
     args:
       executable: /bin/bash
   - name: Install Prometheus
@@ -85,7 +84,7 @@
     shell: kubectl get secret loki-grafana -n monitoring -o jsonpath={".data.admin-password"} | base64 -d
     register: password
   - name: View password for admin account for http://164.92.188.100:30551
-    debug: msg="{{ dashboard_token.stdout }}"
+    debug: msg="{{ password.stdout }}"
 
 
 
