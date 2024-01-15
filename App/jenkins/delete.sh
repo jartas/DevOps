@@ -1,0 +1,1 @@
+kubectl delete pvc jenkins-pvc & kubectl delete deployment jenkins &kubectl delete service jenkins

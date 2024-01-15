@@ -1,27 +1,15 @@
 - name: Deploy Jenkins in Kubernetes
   hosts: k3s_1st_master_install
   remote_user: root
-  gather_facts: false
-  
-  vars:
-    ansible_python_interpreter: /usr/bin/python3.8
+  gather_facts: true
 
   tasks:
 
-    - name: Create Persistent Volume Claim
-      k8s:
-        kubeconfig: /etc/rancher/k3s/k3s.yaml
-        definition: "{{ lookup('template', 'pvc_jenkins.yaml') }}"
-      register: pvc_result
-
-    - name: Deploy Jenkins Deployment
-      k8s:
-        kubeconfig: /etc/rancher/k3s/k3s.yaml
-        definition: "{{ lookup('template', 'jenkins-deployment.yaml') }}"
-      register: deployment_result
-   
-    - name: Create Jenkins Service
-      k8s:
-        kubeconfig: /etc/rancher/k3s/k3s.yaml
-        definition: "{{ lookup('template', 'jenkins-service.yaml') }}"
-      register: service_result
+    - name: Deploy Jenkins
+      shell: |
+        kubectl create namespace jenkins
+        kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/App/jenkins/pvc_jenkins.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml -n jenkins
+        kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/App/jenkins/jenkins-deployment.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml -n jenkins
+        kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/App/jenkins/jenkins-service.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml -n jenkins
+      args:
+        executable: /bin/bash
