@@ -2,6 +2,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: jenkins-pvc
+  labels:
+    type: longhorn
+    app: jenkins  
 spec:
   storageClassName: longhorn
   accessModes:
