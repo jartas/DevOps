@@ -6,9 +6,6 @@
   tasks:
 
     - name: Deploy Jenkins
-      securityContext:
-        fsGroup: 1000 
-        runAsUser: 0
       shell: |
         kubectl create namespace jenkins
         kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/App/jenkins/jenkins_pvc.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml -n jenkins
