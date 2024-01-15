@@ -1,0 +1,50 @@
+
+test_pod:
+  enabled: false
+
+loki:
+  enabled: true
+  persistence:
+    enabled: true
+    storageClass: longhorn
+    size: 5Gi
+
+
+promtail:
+  enabled: true
+grafana:
+  enabled: true
+  service:
+    enabled: true
+    type: NodePort
+    nodePort: 30551
+  sidecar:
+    datasources:
+      label: ""
+      labelValue: ""
+      enabled: true
+      maxLines: 1000
+  grafana.ini:
+    paths:
+      data: /var/lib/grafana/
+      logs: /var/log/grafana
+      plugins: /var/lib/grafana/plugins
+      provisioning: /etc/grafana/provisioning
+    analytics:
+      check_for_updates: true
+    log:
+      mode: console
+    grafana_net:
+      url: https://grafana.net
+    dashboards:
+      versions_to_keep: 0
+      min_refresh_interval: 5s
+      default_home_dashboard_path: /etc/grafana/provisioning/datasources/dashboard.json
+  image:
+    tag: latest
+
+
+
+
+
+

@@ -1,0 +1,165 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: loki-grafana
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/instance: loki
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: latest
+    helm.sh/chart: grafana-6.43.5
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"deployment.kubernetes.io/revision":"1","meta.helm.sh/release-name":"loki","meta.helm.sh/release-namespace":"monitoring"},"creationTimestamp":"2024-01-14T18:41:56Z","generation":1,"labels":{"app.kubernetes.io/instance":"loki","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"grafana","app.kubernetes.io/version":"latest","helm.sh/chart":"grafana-6.43.5"},"name":"loki-grafana","namespace":"monitoring","resourceVersion":"940732","uid":"536b7c2f-15ed-4690-936b-b018306de372"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app.kubernetes.io/instance":"loki","app.kubernetes.io/name":"grafana"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"checksum/config":"84c106011408c203d0cbf0574e5a33450274c4b9ecc0f7a1bfa6df6eadca2097","checksum/dashboards-json-config":"01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b","checksum/sc-dashboard-provider-config":"01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b","checksum/secret":"977eaf03561fb1e94915a5c2c3cc07203ce378a9bb795d858621ca8289e273fa"},"creationTimestamp":null,"labels":{"app.kubernetes.io/instance":"loki","app.kubernetes.io/name":"grafana"}},"spec":{"automountServiceAccountToken":true,"containers":[{"env":[{"name":"METHOD","value":"WATCH"},{"name":"LABEL"},{"name":"FOLDER","value":"/etc/grafana/provisioning/datasources"},{"name":"RESOURCE","value":"both"},{"name":"REQ_USERNAME","valueFrom":{"secretKeyRef":{"key":"admin-user","name":"loki-grafana"}}},{"name":"REQ_PASSWORD","valueFrom":{"secretKeyRef":{"key":"admin-password","name":"loki-grafana"}}},{"name":"REQ_URL","value":"http://localhost:3000/api/admin/provisioning/datasources/reload"},{"name":"REQ_METHOD","value":"POST"}],"image":"quay.io/kiwigrid/k8s-sidecar:1.19.2","imagePullPolicy":"IfNotPresent","name":"grafana-sc-datasources","resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","volumeMounts":[{"mountPath":"/etc/grafana/provisioning/datasources","name":"sc-datasources-volume"}]},{"env":[{"name":"GF_SECURITY_ADMIN_USER","valueFrom":{"secretKeyRef":{"key":"admin-user","name":"loki-grafana"}}},{"name":"GF_SECURITY_ADMIN_PASSWORD","valueFrom":{"secretKeyRef":{"key":"admin-password","name":"loki-grafana"}}},{"name":"GF_PATHS_DATA","value":"/var/lib/grafana/"},{"name":"GF_PATHS_LOGS","value":"/var/log/grafana"},{"name":"GF_PATHS_PLUGINS","value":"/var/lib/grafana/plugins"},{"name":"GF_PATHS_PROVISIONING","value":"/etc/grafana/provisioning"}],"image":"grafana/grafana:latest","imagePullPolicy":"IfNotPresent","livenessProbe":{"failureThreshold":10,"httpGet":{"path":"/api/health","port":3000,"scheme":"HTTP"},"initialDelaySeconds":60,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":30},"name":"grafana","ports":[{"containerPort":3000,"name":"grafana","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/api/health","port":3000,"scheme":"HTTP"},"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1},"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","volumeMounts":[{"mountPath":"/etc/grafana/grafana.ini","name":"config","subPath":"grafana.ini"},{"mountPath":"/var/lib/grafana","name":"storage"},{"mountPath":"/etc/grafana/provisioning/datasources","name":"sc-datasources-volume"},{"mountPath":"/etc/grafana/provisioning/dashboards","name":"grafana-dashboard-definition"}]}],"dnsPolicy":"ClusterFirst","enableServiceLinks":true,"restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{"fsGroup":472,"runAsGroup":472,"runAsUser":472},"serviceAccount":"loki-grafana","serviceAccountName":"loki-grafana","terminationGracePeriodSeconds":30,"volumes":[{"configMap":{"defaultMode":420,"name":"loki-grafana"},"name":"config"},{"emptyDir":{},"name":"storage"},{"emptyDir":{},"name":"sc-datasources-volume"},{"emptyDir":{},"name":"grafana-dashboard-definition"}]}}}}
+    meta.helm.sh/release-name: loki
+    meta.helm.sh/release-namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: loki
+      app.kubernetes.io/name: grafana
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: loki
+        app.kubernetes.io/name: grafana
+      annotations:
+        checksum/config: 84c106011408c203d0cbf0574e5a33450274c4b9ecc0f7a1bfa6df6eadca2097
+        checksum/dashboards-json-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        checksum/sc-dashboard-provider-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        checksum/secret: 977eaf03561fb1e94915a5c2c3cc07203ce378a9bb795d858621ca8289e273fa
+    spec:
+      volumes:
+      - name: config
+        configMap:
+          name: loki-grafana
+          defaultMode: 420
+      - name: storage
+        emptyDir: {}
+      - name: sc-datasources-volume
+        emptyDir: {}
+      - name: grafana-dashboard
+        configMap:
+          defaultMode: 420
+          name: grafana-dashboard
+      - name: grafana-dashboard-definition
+        configMap:
+          defaultMode: 420
+          name: grafana-dashboardsdef
+      containers:
+      - name: grafana-sc-datasources
+        image: quay.io/kiwigrid/k8s-sidecar:1.19.2
+        env:
+        - name: METHOD
+          value: WATCH
+        - name: LABEL
+        - name: FOLDER
+          value: /etc/grafana/provisioning/datasources
+        - name: RESOURCE
+          value: both
+        - name: REQ_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: loki-grafana
+              key: admin-user
+        - name: REQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: loki-grafana
+              key: admin-password
+        - name: REQ_URL
+          value: http://localhost:3000/api/admin/provisioning/datasources/reload
+        - name: REQ_METHOD
+          value: POST
+        resources: {}
+        volumeMounts:
+        - name: sc-datasources-volume
+          mountPath: /etc/grafana/provisioning/datasources
+        - mountPath: /var/lib/grafana/dashboards
+          name: grafana-dashboard
+          readOnly: false
+        - mountPath: /etc/grafana/provisioning/dashboards
+          name: grafana-dashboard-definition
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+      - name: grafana
+        image: grafana/grafana:latest
+        ports:
+        - name: grafana
+          containerPort: 3000
+          protocol: TCP
+        env:
+        - name: GF_SECURITY_ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: loki-grafana
+              key: admin-user
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: loki-grafana
+              key: admin-password
+        - name: GF_PATHS_DATA
+          value: /var/lib/grafana/
+        - name: GF_PATHS_LOGS
+          value: /var/log/grafana
+        - name: GF_PATHS_PLUGINS
+          value: /var/lib/grafana/plugins
+        - name: GF_PATHS_PROVISIONING
+          value: /etc/grafana/provisioning
+        resources: {}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/grafana/grafana.ini
+          subPath: grafana.ini
+        - name: storage
+          mountPath: /var/lib/grafana
+        - name: sc-datasources-volume
+          mountPath: /etc/grafana/provisioning/datasources
+        - name: grafana-dashboard-definition
+          mountPath: /etc/grafana/provisioning/dashboards
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+            scheme: HTTP
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: loki-grafana
+      serviceAccount: loki-grafana
+      automountServiceAccountToken: true
+      securityContext:
+        runAsUser: 472
+        runAsGroup: 472
+        fsGroup: 472
+      schedulerName: default-scheduler
+      enableServiceLinks: true
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

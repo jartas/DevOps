@@ -39,7 +39,8 @@
       executable: /bin/bash
 
   - name: Instalation K8s Dashboard
-    shell: "kubectl create namespace kubernetes-dashboard\nkubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml \nkubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/k8s_dashboard/manifest.yaml \nkubectl wait --for=condition=complet deployment/traefik -n kube-system\nkubectl -n kube-system patch deployment traefik \\\n--type=json \\\n-p='[{\"op\": \"add\", \"path\": \"/spec/template/spec/containers/0/args/-\", \"value\": \"--serversTransport.insecureSkipVerify=true\"}]'\nkubectl -n kubernetes-dashboard patch deployment kubernetes-dashboard --type=json -p='[{\"op\": \"add\", \"path\": \"/spec/template/spec/containers/0/args/-\", \"value\": \"--token-ttl=0\"}]'\n"
+    shell: "kubectl create namespace kubernetes-dashboard\nkubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/k8s_dashboard/rbac.yaml  \nkubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/k8s_dashboard/manifest.yaml \nkubectl wait --for=condition=complet deployment/traefik -n kube-system\nkubectl -n kube-system patch deployment traefik \\\n--type=json \\\n-p='[{\"op\": \"add\", \"path\": \"/spec/template/spec/containers/0/args/-\", \"value\": \"--serversTransport.insecureSkipVerify=true\"}]'\nkubectl -n kubernetes-dashboard patch deployment kubernetes-dashboard --type=json -p='[{\"op\": \"add\", \"path\": \"/spec/template/spec/containers/0/args/-\", \"value\": \"--token-ttl=0\"}]'\n"
+
     args:
       executable: /bin/bash
 
@@ -50,10 +51,43 @@
     debug: msg="{{ dashboard_token.stdout }}"
 
   - name: Instalation Longhorn (Persistent volume)
+    # Install longhorn persistent volume 
     shell: |
       kubectl create namespace longhorn-system
       kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.5.3/deploy/longhorn.yaml
       kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/longhorn/manifest.yaml
+      sleep 120
     args:
       executable: /bin/bash
+  - name: Install Prometheus
+    # Install prometheus with default NodePort
+    shell: |
+      kubectl create namespace monitoring
+      helm repo add prometheus-community https://prometheus-community.github.io/helm-charts --kubeconfig /etc/rancher/k3s/k3s.yaml
+      helm repo update --kubeconfig /etc/rancher/k3s/k3s.yaml
+      helm install prometheus prometheus-community/prometheus -n monitoring -f https://raw.githubusercontent.com/jartas/DevOps/main/prometheus/values.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml
+    args:
+      executable: /bin/bash
+
+  - name: Install Grafana/Loki
+    # Install /Grafana/Loki including datasource for K3s and dashboard for K3s monitoring with default dashboard
+    shell: |
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/grafana/configmap.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml
+      helm install loki grafana/loki-stack -n monitoring -f https://raw.githubusercontent.com/jartas/DevOps/main/loki/values.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml
+      kubectl rollout status deploy/loki-grafana -n monitoring
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/loki/deployment.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml
+
+    args:
+      executable: /bin/bash
+
+  - name: Password for Grafana admin account
+    shell: kubectl get secret loki-grafana -n monitoring -o jsonpath={".data.admin-password"} | base64 -d
+    register: password
+  - name: View password for admin account for http://164.92.188.100:30551
+    debug: msg="{{ password.stdout }}"
+
+
+
+
+
 
