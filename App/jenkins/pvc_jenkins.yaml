@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: library-longhorn-pvc
+  name: jenkins-pvc
 spec:
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn
   resources:
     requests:
-      storage: 2Gi
+      storage: 5Gi

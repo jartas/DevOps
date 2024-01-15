@@ -20,13 +20,6 @@ spec:
         envFrom:
         - configMapRef:
             name: configmap-lib
-        volumeMounts:
-        - name: library-longhorn-pvc
-          mountPath: /myapp
         ports:
         - containerPort: 3000
           name: library-app
-      volumes:
-      - name: library-longhorn-pvc
-        persistentVolumeClaim:
-          claimName: library-longhorn-pvc
