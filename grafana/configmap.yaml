@@ -8,6 +8,20 @@ metadata:
       {"apiVersion":"v1","data":{"dashboards.yaml":"apiVersion: 1\nproviders: \n  - name: 'Metrics'\n    updateIntervalSeconds: 10\n    allowUiUpdates: true\n    options:\n      path: /var/lib/grafana/dashboards\n      foldersFromFilesStructure: true\n    type: file\n      #magic___^_^___line"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"grafana-dashboardsdef","namespace":"monitoring"}} #magic___^_^___line
 data:
   dashboards.yaml: "apiVersion: 1\nproviders: \n  - name: 'Metrics'\n    updateIntervalSeconds: 10\n    allowUiUpdates: true\n    options:\n      path: /etc/grafana/provisioning/datasources\n      foldersFromFilesStructure: true\n    type: file\n      #magic___^_^___line"
+
+  ds.yaml: |-
+    {
+        "apiVersion": 1,
+        "datasources": [
+            {
+              "name": "k3s prometheus",
+              "type": "prometheus",
+              "uid": "k3s",
+              "url": "http://164.92.188.100:30536/"
+            }
+        ]
+    }
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -2705,4 +2719,17 @@ data:
       "uid": "sadlil-loki-apps-dashboard",
       "version": 2,
       "weekStart": ""
+    }
+
+  ds.yaml: |-
+    {
+        "apiVersion": 1,
+        "datasources": [
+            {
+              "name": "k3s prometheus",
+              "type": "prometheus",
+              "uid": "k3s",
+              "url": "http://164.92.188.100:30536/"
+            }
+        ]
     }

@@ -81,6 +81,12 @@
     args:
       executable: /bin/bash
 
+  - name: Password for Grafana admin account
+    shell: kubectl get secret loki-grafana -n monitoring -o jsonpath={".data.admin-password"} | base64 -d
+    register: password
+  - name: View password for admin account for http://164.92.188.100:30551
+    debug: msg="{{ dashboard_token.stdout }}"
+
 
 
 
