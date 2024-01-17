@@ -19,7 +19,7 @@ spec:
         name: library-app
         envFrom:
         - configMapRef:
-            name: configmap-lib
+            name: configmap-lib-test
         ports:
         - containerPort: 3000
           name: library-app
