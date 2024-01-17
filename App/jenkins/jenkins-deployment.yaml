@@ -20,6 +20,13 @@ spec:
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home
+        resources:
+          limits:
+            memory: "2056Mi"
+            cpu: "2"
+          requests:
+            memory: "2056Mi"
+            cpu: "500m"
       securityContext:
         fsGroup: 1000 
         runAsUser: 0

@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: configmap-lib-test
 data:
-  DATABASE_HOST: "postgres-service"
-  DATABASE_USER: "postgres"
-  DATABASE_PASSWORD: "1234"
+  DATABASE_HOST: "postgresql-primary.scraper.svc"
+  DATABASE_USER: "scraper"
+  DATABASE_PASSWORD: "-2aIgNN%40%40bJOt%3C,i%40%28%3Ecjdtd"
   DATABASE_NAME: "library_test"
-  DATABASE_URL: "postgres://postgres:1234@postgres-service:5432/library_test"
+  DATABASE_URL: "postgresql://scraper:-2aIgNN%40%40bJOt%3C,i%40%28%3Ecjdtd@postgresql-primary.scraper.svc:5432/library_test"
   RAILS_ENV: "test"
