@@ -18,10 +18,17 @@ spec:
       - name: postgresql-readyness
         image: 'bitnami/postgresql:14.6.0-debian-11-r33'
         command:
-        - /bin/bash
-        - '-ce'
-        - >
-          until pg_isready --host "${POSTGRES_HOST}" --port "${POSTGRES_PORT}" --username "${POSTGRES_USER}" --dbname "${POSTGRESQL_DATABASE}"; do sleep 4 echo "$(date "+%R:%S") | Awaiting PostgreSQL to be ready..." done echo 'PostgreSQL seems to be ready!!!'
+          - /bin/bash
+          - '-ce'
+          - >
+            until pg_isready --host "${POSTGRES_HOST}" --port
+            "${POSTGRES_PORT}" --username "${POSTGRES_USER}" --dbname
+            "${POSTGRESQL_DATABASE}"; do
+              sleep 4
+              echo "$(date "+%R:%S") | Awaiting PostgreSQL to be ready..."
+            done
+
+            echo 'PostgreSQL seems to be ready!!!'
         env:
         - name: POSTGRES_HOST
           value: postgresql-primary
