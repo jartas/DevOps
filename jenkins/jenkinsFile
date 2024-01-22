@@ -1,0 +1,47 @@
+pipeline {
+    agent {
+        kubernetes {
+            inheritFrom 'jenkins-rails-slave' 
+        }
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scmGit(
+                branches: [[name: 'main']],
+                userRemoteConfigs: [[credentialsId:  'git_ssh',
+                url: 'git@github.com:JKabela/Library.git']])
+            }
+        }
+        stage('Building and uploading image') {
+            steps{
+                script {
+                    sh 'DOCKER_CONFIG=/kaniko/.docker/ kaniko --context=git://github.com/JKabela/Library.git --dockerfile=/Dockerfile --destination=docker.io/kabi123/library --verbosity=info'
+                }
+            }
+        }
+        stage('Install Gems'){
+            steps {
+                sh 'bundle install'
+            }
+        }
+        stage('Create test DB'){
+            steps {
+                sh 'rake db:create RAILS_ENV=test'
+                sh 'rake db:migrate RAILS_ENV=test'
+            }
+        }
+        stage('Running tests'){
+            steps {
+                sh 'rspec'
+            }
+        }
+        stage('Deploy') {
+            steps{
+                script {
+                    sh 'KUBECONFIG=/kubeconfig/k3s.yaml kubectl rollout restart deployment/library-app -n scraper'
+                }
+            }
+        }
+    }
+}
