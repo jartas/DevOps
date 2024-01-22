@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: library-app
+  name: library-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: library-app
+  template:
+    metadata:
+      labels:
+        app: library-app
+    spec:
+      initContainers:
+      - name: postgresql-readyness
+        image: 'bitnami/postgresql:14.6.0-debian-11-r33'
+        command:
+          - /bin/bash
+          - '-ce'
+          - >
+            until pg_isready --host "${POSTGRES_HOST}" --port
+            "${POSTGRES_PORT}" --username "${POSTGRES_USER}" --dbname
+            "${POSTGRESQL_DATABASE}"; do
+              sleep 4
+              echo "$(date "+%R:%S") | Awaiting PostgreSQL to be ready..."
+            done
+
+            echo 'PostgreSQL seems to be ready!!!'
+        env:
+        - name: POSTGRES_HOST
+          value: postgresql-primary
+        - name: POSTGRES_PORT
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-pguser-scraper
+              key: port
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-pguser-scraper
+              key: user
+        - name: POSTGRESQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-pguser-scraper
+              key: dbname
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-pguser-scraper
+              key: password
+      containers:
+      - image: kabi123/library
+        name: library-app
+        envFrom:
+        - secretRef:
+            name: database-secret  # Corrected indentation here
+        ports:
+        - containerPort: 3000
+          name: library-app
