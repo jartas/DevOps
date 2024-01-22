@@ -27,7 +27,7 @@ spec:
           requests:
             memory: "2056Mi"
             cpu: "500m"
-      securityContext:
+      securityContext:  
         fsGroup: 1000 
         runAsUser: 0
       volumes:

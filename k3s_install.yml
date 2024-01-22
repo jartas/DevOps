@@ -86,6 +86,14 @@
   - name: View password for admin account for http://164.92.188.100:30551
     debug: msg="{{ password.stdout }}"
 
+  - name: Install Jenkins
+    shell: |
+      kubectl create namespace jenkins
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/App/jenkins/ --kubeconfig /etc/rancher/k3s/k3s.yaml -n jenkins -R
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/App/jenkins/jenkins-deployment.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml -n jenkins
+      kubectl apply -f https://raw.githubusercontent.com/jartas/DevOps/main/App/jenkins/jenkins-service.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml -n jenkins
+    args:
+      executable: /bin/bash
 
 
 

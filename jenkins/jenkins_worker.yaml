@@ -5,10 +5,10 @@ metadata:
 spec:
   containers:
     - name: jnlp
-      image: kabi123/inbound-agent-rails
+      image: registry.digitalocean.com/devopsreg/inbound-agent-rails:1
       envFrom:
-        - configMapRef:
-            name: configmap-lib-test
+        - secretRef:
+            name: database-secret  # Corrected indentation here
       command:
         - "/usr/local/bin/jenkins-agent"
       tty: true
@@ -21,6 +21,8 @@ spec:
       securityContext:
         runAsUser: 0
         privileged: true
+  imagePullSecrets:
+          - name: mycr
   restartPolicy: Never
   volumes:
     - name: kubeconfig-volume
@@ -30,7 +32,7 @@ spec:
       projected:
         sources:
           - secret:
-              name: dockercred
+              name: docker-registry-secret
               items:
                 - key: .dockerconfigjson
                   path: config.json

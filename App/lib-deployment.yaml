@@ -53,11 +53,13 @@ spec:
               name: postgresql-pguser-scraper
               key: password
       containers:
-      - image: kabi123/library
+      - image: registry.digitalocean.com/devopsreg/library
         name: library-app
         envFrom:
         - secretRef:
-            name: database-secret  # Corrected indentation here
+            name: database-secret
         ports:
         - containerPort: 3000
           name: library-app
+      imagePullSecrets:
+      - name: mycr

@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom 'jenkins-rails-slave' 
+            inheritFrom 'Jenkins-rails-do-reg' 
         }
     }
     stages {
@@ -16,7 +16,7 @@ pipeline {
         stage('Building and uploading image') {
             steps{
                 script {
-                    sh 'DOCKER_CONFIG=/kaniko/.docker/ kaniko --context=git://github.com/JKabela/Library.git --dockerfile=/Dockerfile --destination=docker.io/kabi123/library --verbosity=info'
+                    sh 'DOCKER_CONFIG=/kaniko/.docker/ kaniko --context=git://github.com/JKabela/Library.git --dockerfile=/Dockerfile --destination=registry.digitalocean.com/devopsreg/library --verbosity=info'
                 }
             }
         }
