@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom 'Jenkins-rails-do-reg' 
+            inheritFrom 'jenkins-rails-slave' 
         }
     }
     stages {
